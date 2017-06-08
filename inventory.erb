@@ -1,0 +1,63 @@
+# vim: ft=ansible
+[OSEv3:children]
+masters
+nodes
+# etcd
+
+[OSEv3:vars]
+ansible_ssh_user=root
+deployment_type=origin
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
+containerized=true
+openshift_release=v1.4
+openshift_image_tag=v1.4.1
+openshift_public_hostname=haf.cloud
+openshift_master_default_subdomain=haf.cloud
+openshift_master_named_certificates=[{"certfile": "/etc/letsencrypt/live/haf.cloud/fullchain.pem","keyfile": "/etc/letsencrypt/live/haf.cloud/privkey.pem"}]
+openshift_master_overwrite_named_certificates=true
+openshift_public_ip=34.198.119.227
+openshift_hostname=master.haf.cloud
+
+# Configure dnsIP in the node config
+openshift_dns_ip=10.10.10.29
+
+openshift_install_examples=true
+openshift_hosted_router_selector='region=infra'
+
+# openshift_generate_no_proxy_hosts=false
+
+# Deploy metrica
+openshift_hosted_metrics_public_url=https://metrics.haf.cloud/hawkular/metrics
+openshift_hosted_metrics_deploy=true
+# OK
+openshift_hosted_metrics_deployer_version=v1.4.1
+
+# Deploy Logging
+openshift_hosted_logging_deploy=true
+
+# Registry
+openshift_hosted_registry_selector='region=infra'
+openshift_hosted_registry_deploy=true
+
+# Cockpit
+osm_use_cockpit=true
+osm_cockpit_plugins=['cockpit-kubernetes']
+
+osn_storage_plugin_deps=['ceph','glusterfs']
+openshift_master_htpasswd_file=/root/ansible/users.htpasswd
+
+openshift_node_debug_level=4
+
+[masters]
+master.haf.cloud openshift_schedulable=true
+
+# [etcd]
+# master.haf.cloud
+
+[nodes]
+# openshift_public_hostname="{{ inventory_hostname }}" openshift_hostname="{{ ansible_default_ipv4.address }}"
+node.haf.cloud openshift_hostname="{{ ansible_default_ipv4.address }}" openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'enabled'}" openshift_schedulable=true
+node1.haf.cloud openshift_hostname="{{ ansible_default_ipv4.address }}" openshift_node_labels="{'region': 'primary', 'zone': 'default', 'metrics':'disabled'}"
+node2.haf.cloud openshift_hostname="{{ ansible_default_ipv4.address }}" openshift_node_labels="{'region': 'primary', 'zone': 'default', 'metrics':'disabled'}"
+
+# node2.haf.cloud openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'disabled'}"
