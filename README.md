@@ -13,6 +13,16 @@ Softwares: docker
 $yum install -y NetworkManager
 $systemctl start NetworkManager
 
+- Instale o docker
+
+sed -i '/OPTIONS=.*/c\OPTIONS="--selinux-enabled --insecure-registry 172.30.0.0/16"' /etc/sysconfig/docker
+
+ou
+
+cp /lib/systemd/system/docker.service  /etc/systemd/system/
+
+e adicione ExecStart=/usr/bin/dockerd  --insecure-registry 172.30.0.0/16
+
 ### Configurações gerais - Ubuntu/CentOS
 $git clone https://github.com/openshift/openshift-ansible.git
 $git clone https://github.com/gshipley/installcentos.git
@@ -63,6 +73,12 @@ oadm policy add-cluster-role-to-user cluster-admin admin --config=/etc/origin/ma
 
 curl https://172.30.0.1:443/healthz
 curl https://kubernetes.default.svc.cluster.local/healthz
+
+## Troubleshooting
+
+Problema com certificados durante a instalação:
+
+https://github.com/openshift/openshift-ansible/issues/1431
 
 
 ## Documentação:
