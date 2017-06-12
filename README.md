@@ -1,31 +1,51 @@
 
-Exemplo no centos7:
+## Pré-Requisitos
 
-https://www.youtube.com/watch?v=-OOnGK-XeVY
+O.S : CentOS7
+Softwares: docker
 
-https://docs.openshift.org/latest/install_config/install/host_preparation.html
 
-yum install -y epel-release
-yum install -y docker wget git ansible
-yum install -y python-cryptography pyOpenSSL.x86_64
+## Passos para Instalação:
 
-yum install -y NetworkManager
-systemctl start NetworkManager
+### Servidores de openshift
 
-git clone https://github.com/openshift/openshift-ansible.git
-git clone https://github.com/gshipley/installcentos.git
 
-# Bug ansible:
+$yum install -y NetworkManager
+$systemctl start NetworkManager
+
+### Configurações gerais - Ubuntu/CentOS
+$git clone https://github.com/openshift/openshift-ansible.git
+$git clone https://github.com/gshipley/installcentos.git
+
+- Criar o arquivo users.htpasswd e atualizar o path do arquivo users.htpasswd na variavel "openshift_master_htpasswd_file" do invetory.erb
+- Gerar chave de ssh e colocar no host alvo para o ansible poder fazer o deploy:
+
+$cd openshift-ansible/
+$git branch
+$git checkout <versão-do-openshift>
+
+### No centOS:
+
+$yum install -y epel-release
+$yum install -y wget git ansible
+$yum install -y python-cryptography pyOpenSSL.x86_64
+
+$ansible-playbook -i inventory.erb openshift-ansible/playbooks/byo/config.yml -v
+
+### No Ubuntu
+
+$sudo apt-get install ansible
+$sudo pip install pyopenssl
+
+$ansible-playbook -i inventory.erb openshift-ansible/playbooks/byo/config.yml -v
+
+
+## Bugs
+
+### ansible:
+
 wget http://cbs.centos.org/kojifiles/packages/ansible/2.2.0/0.50.prerelease.el7/noarch/ansible-2.2.0-0.50.prerelease.el7.noarch.rpm
 yum localinstall ansible-2.2.0-0.50.prerelease.el7.noarch.rpm
-
-# Gerar chave de ssh e colocar no host alvo para o ansible poder fazer o deploy
-
-ansible-playbook -i inventory.erb openshift-ansible/playbooks/byo/config.yml
-
-
-# Custom Cert:
-https://docs.openshift.org/latest/install_config/certificate_customization.html
 
 # Examples:
 
@@ -43,3 +63,13 @@ oadm policy add-cluster-role-to-user cluster-admin admin --config=/etc/origin/ma
 
 curl https://172.30.0.1:443/healthz
 curl https://kubernetes.default.svc.cluster.local/healthz
+
+
+## Documentação:
+
+https://www.youtube.com/watch?v=-OOnGK-XeVY
+
+https://docs.openshift.org/latest/install_config/install/host_preparation.html
+
+# Custom Cert:
+https://docs.openshift.org/latest/install_config/certificate_customization.html
