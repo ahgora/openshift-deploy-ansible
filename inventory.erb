@@ -63,5 +63,6 @@ master.ahgoracloud.com.br openshift_schedulable=true
 node.ahgoracloud.com.br openshift_hostname="{{ ansible_default_ipv4.address }}" openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'enabled'}" openshift_schedulable=true
 node1.ahgoracloud.com.br openshift_hostname="{{ ansible_default_ipv4.address }}" openshift_node_labels="{'region': 'primary', 'zone': 'default', 'metrics':'disabled'}"
 node2.ahgoracloud.com.br openshift_hostname="{{ ansible_default_ipv4.address }}" openshift_node_labels="{'region': 'primary', 'zone': 'default', 'metrics':'disabled'}"
+node3.ahgoracloud.com.br openshift_hostname="{{ ansible_default_ipv4.address }}" openshift_node_labels="{'region': 'primary', 'zone': 'default', 'metrics':'disabled'}"
 
 # node2.ahgoracloud.com.br openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'disabled'}"
