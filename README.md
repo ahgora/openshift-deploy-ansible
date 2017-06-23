@@ -35,6 +35,10 @@ $git branch
 $git checkout <versão-do-openshift>
 
 ### No centOS:
+### https://docs.docker.com/engine/installation/linux/centos/#install-using-the-repository
+
+$yum install -y yum-utils device-mapper-persistent-data lvm2
+$yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
 Versions:
 ansible: 2.3.1.0
