@@ -36,11 +36,18 @@ $git checkout <versão-do-openshift>
 
 ### No centOS:
 
+Versions:
+ansible: 2.3.1.0
+
 $yum install -y epel-release
 $yum install -y wget git ansible
 $yum install -y python-cryptography pyOpenSSL.x86_64
+$yum install -y java-1.8.0-openjdk-headless
+$yum install -y docker-ce
+$yum install -y python2-passlib
 
-$ansible-playbook -i inventory.erb openshift-ansible/playbooks/byo/config.yml -v
+$ansible-playbook -i openshift-deploy-ansible/inventory.erb openshift-ansible/playbooks/byo/config.yml
+$ansible-playbook -i openshift-deploy-ansible/inventory.erb openshift-ansible/playbooks/adhoc/uninstall.yml
 
 ### No Ubuntu
 
@@ -48,7 +55,6 @@ $sudo apt-get install ansible
 $sudo pip install pyopenssl
 
 $ansible-playbook -i inventory.erb openshift-ansible/playbooks/byo/config.yml -v
-
 
 ## Bugs
 
