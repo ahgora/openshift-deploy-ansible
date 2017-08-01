@@ -3,6 +3,7 @@
 masters
 nodes
 # etcd
+glusterfs
 
 [OSEv3:vars]
 ansible_ssh_user=root
@@ -25,6 +26,17 @@ docker_version=ce-17.06.0.ce-1.el7.centos
 
 # Configure dnsIP in the node config
 openshift_dns_ip=192.168.135.96
+
+openshift_disable_check=docker_storage,memory_availability
+# enable_docker_excluder=false
+# enable_excluders=false
+
+# https://cbs.centos.org/koji/packageinfo?packageID=3175
+# https://github.com/openshift/openshift-ansible/issues/4639
+# openshift_additional_repos=[{"id": "centos-future", "baseurl": "https://buildlogs.centos.org/centos/7/paas/x86_64/openshift-future/", "enabled": 1, "gpgcheck": 0}]
+openshift_additional_repos=[{"id": "centos-paas-36", "baseurl": "https://buildlogs.centos.org/centos/7/paas/x86_64/openshift-origin36/", "enabled": 1, "gpgcheck": 0}]
+
+# openshift_use_system_containers=False
 
 openshift_install_examples=true
 openshift_hosted_router_selector='region=infra'
@@ -74,3 +86,9 @@ node3.ahgoracloud.com.br openshift_public_ip="45.56.70.28" openshift_ip="192.168
 
 # openshift_public_hostname="{{ inventory_hostname }}" openshift_hostname="{{ ansible_default_ipv4.address }}"
 # node2.ahgoracloud.com.br openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'disabled'}"
+
+[glusterfs]
+node.ahgora.com.br  glusterfs_devices='[ "/dev/sdc", "/dev/sdd", "/dev/sde" ]'
+node1.ahgora.com.br  glusterfs_devices='[ "/dev/sdc", "/dev/sdd", "/dev/sde" ]'
+node2.ahgora.com.br  glusterfs_devices='[ "/dev/sdc", "/dev/sdd", "/dev/sde" ]'
+
