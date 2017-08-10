@@ -16,16 +16,16 @@ openshift_public_hostname=ahgoracloud.com.br
 openshift_master_default_subdomain=ahgoracloud.com.br
 openshift_master_named_certificates=[{"certfile": "/etc/letsencrypt/live/ahgoracloud.com.br-0001/fullchain.pem","keyfile": "/etc/letsencrypt/live/ahgoracloud.com.br-0001/privkey.pem"}]
 openshift_master_overwrite_named_certificates=true
-openshift_public_ip=45.79.10.185
+openshift_public_ip=23.239.31.111
 openshift_hostname=master.ahgoracloud.com.br
 # docker_version=ce
-# docker_version=1.12.6
+docker_version=1.12.6
 # docker-ce-17.06.0.ce-1.el7.centos.x86_64
 # docker_version=ce-17.03.1.ce-1.el7.centos
-docker_version=ce-17.06.0.ce-1.el7.centos
+# docker_version=ce-17.06.0.ce-1.el7.centos
 
 # Configure dnsIP in the node config
-openshift_dns_ip=192.168.135.96
+openshift_dns_ip=192.168.129.4
 
 openshift_disable_check=docker_storage,memory_availability
 # enable_docker_excluder=false
@@ -74,21 +74,21 @@ master.ahgoracloud.com.br openshift_schedulable=true
 # master.ahgoracloud.com.br
 
 [nodes]
-# 45.79.10.185 192.168.135.96 node.ahgoracloud.com.br master.ahgoracloud.com.br ahgoracloud.com.br node0 master
-# 45.79.3.215 192.168.161.246 node1.ahgoracloud.com.br node1
-# 45.79.11.172 192.168.159.61 node2.ahgoracloud.com.br node2
-# 45.56.70.28 192.168.203.216 node3.ahgoracloud.com.br node3
+# 23.239.31.111   192.168.129.4    node0.ahgoracloud.com.br master.ahgoracloud.com.br ahgoracloud.com.br node0 master
+# 45.56.68.244    192.168.166.32   node1.ahgoracloud.com.br node1
+# 72.14.187.157   192.168.167.129  node2.ahgoracloud.com.br node2
+# 69.164.201.80   192.168.202.6    node3.ahgoracloud.com.br node3
 
-node.ahgoracloud.com.br openshift_public_ip="45.79.10.185" openshift_ip="192.168.135.96" openshift_hostname="node0" openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'enabled'}" openshift_schedulable=true
-node1.ahgoracloud.com.br openshift_public_ip="45.79.3.215" openshift_ip="192.168.161.246" openshift_hostname="node1" openshift_node_labels="{'region': 'primary', 'zone': 'default', 'metrics':'disabled'}"
-node2.ahgoracloud.com.br openshift_public_ip="45.79.11.172" openshift_ip="192.168.159.61" openshift_hostname="node2" openshift_node_labels="{'region': 'primary', 'zone': 'default', 'metrics':'disabled'}"
-node3.ahgoracloud.com.br openshift_public_ip="45.56.70.28" openshift_ip="192.168.203.216" openshift_hostname="node3" openshift_node_labels="{'region': 'primary', 'zone': 'default', 'metrics':'disabled'}"
+node0 openshift_public_ip="23.239.31.111" openshift_ip="192.168.129.4" openshift_hostname="node0" openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'enabled'}" openshift_schedulable=true
+node1 openshift_public_ip="45.56.68.244" openshift_ip="192.168.166.32" openshift_hostname="node1" openshift_node_labels="{'region': 'primary', 'zone': 'default', 'metrics':'disabled'}"
+node2 openshift_public_ip="72.14.187.157" openshift_ip="192.168.167.129" openshift_hostname="node2" openshift_node_labels="{'region': 'primary', 'zone': 'default', 'metrics':'disabled'}"
+node3 openshift_public_ip="69.164.201.80" openshift_ip="192.168.202.6" openshift_hostname="node3" openshift_node_labels="{'region': 'primary', 'zone': 'default', 'metrics':'disabled'}"
 
 # openshift_public_hostname="{{ inventory_hostname }}" openshift_hostname="{{ ansible_default_ipv4.address }}"
 # node2.ahgoracloud.com.br openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'disabled'}"
 
 [glusterfs]
-node.ahgoracloud.com.br  glusterfs_devices='[ "/dev/sdc", "/dev/sdd", "/dev/sde" ]'
-node1.ahgoracloud.com.br  glusterfs_devices='[ "/dev/sdc", "/dev/sdd", "/dev/sde" ]'
-node2.ahgoracloud.com.br  glusterfs_devices='[ "/dev/sdc", "/dev/sdd", "/dev/sde" ]'
+node0  glusterfs_devices='[ "/dev/sdc", "/dev/sdd" ]'
+node1  glusterfs_devices='[ "/dev/sdc", "/dev/sdd" ]'
+node2  glusterfs_devices='[ "/dev/sdc", "/dev/sdd" ]'
 
