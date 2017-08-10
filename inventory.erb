@@ -2,7 +2,7 @@
 [OSEv3:children]
 masters
 nodes
-# etcd
+etcd
 glusterfs
 
 [OSEv3:vars]
@@ -70,8 +70,10 @@ openshift_node_debug_level=2
 [masters]
 master openshift_schedulable=true
 
-# [etcd]
-# master.ahgoracloud.com.br
+[etcd]
+node0
+node1
+node2
 
 [nodes]
 # 23.239.31.111   192.168.129.4    node0.ahgoracloud.com.br master.ahgoracloud.com.br ahgoracloud.com.br node0 master
