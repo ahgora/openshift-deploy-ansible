@@ -25,6 +25,9 @@ cp /lib/systemd/system/docker.service  /etc/systemd/system/
 
 e adicione ExecStart=/usr/bin/dockerd  --insecure-registry 172.30.0.0/16
 
+### Auxiliar intalar tmux no master
+https://gist.github.com/pokev25/4b9516d32f4021d945a140df09bf1fde
+
 ### Configurações gerais - Ubuntu/CentOS
 $git clone https://github.com/openshift/openshift-ansible.git
 $git clone https://github.com/gshipley/installcentos.git
@@ -54,6 +57,8 @@ $yum install -y python2-passlib
 
 $ansible-playbook -i openshift-deploy-ansible/inventory.erb openshift-ansible/playbooks/byo/config.yml
 $ansible-playbook -i openshift-deploy-ansible/inventory.erb openshift-ansible/playbooks/adhoc/uninstall.yml
+
+ansible-playbook -i openshift-deploy-ansible/inventory.erb openshift-ansible/playbooks/byo/config.yml -v
 
 ### No Ubuntu
 
