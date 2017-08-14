@@ -36,7 +36,7 @@ openshift_disable_check=docker_storage,memory_availability
 # https://cbs.centos.org/koji/packageinfo?packageID=3175
 # https://github.com/openshift/openshift-ansible/issues/4639
 # openshift_additional_repos=[{"id": "centos-future", "baseurl": "https://buildlogs.centos.org/centos/7/paas/x86_64/openshift-future/", "enabled": 1, "gpgcheck": 0}]
-openshift_additional_repos=[{"id": "centos-paas-36", "baseurl": "https://buildlogs.centos.org/centos/7/paas/x86_64/openshift-origin36/", "enabled": 1, "gpgcheck": 0}]
+# openshift_additional_repos=[{"id": "centos-paas-36", "baseurl": "https://buildlogs.centos.org/centos/7/paas/x86_64/openshift-origin36/", "enabled": 1, "gpgcheck": 0}]
 
 # openshift_use_system_containers=False
 
@@ -72,7 +72,8 @@ openshift_master_htpasswd_file=/root/users.htpasswd
 openshift_node_debug_level=2
 
 [masters]
-master openshift_schedulable=true
+# master openshift_schedulable=true
+master openshift_public_ip="23.239.31.111" openshift_ip="192.168.129.4" openshift_hostname="node0" openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'enabled'}" openshift_schedulable=true
 
 [etcd]
 master

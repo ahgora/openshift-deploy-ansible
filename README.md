@@ -12,8 +12,10 @@ Softwares: docker
 #### Pré requisitos
 https://docs.openshift.org/latest/install_config/install/host_preparation.html
 
-$yum install -y NetworkManager
-$systemctl start NetworkManager
+$ yum install -y NetworkManager
+$ systemctl start NetworkManager
+$ yum install python-passlib -y
+$ yum install java-1.8.0-openjdk-headless -y
 
 - Instale o docker
 
