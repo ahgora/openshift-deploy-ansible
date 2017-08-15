@@ -79,7 +79,7 @@ openshift_node_debug_level=2
 master openshift_hostname="node0" openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'enabled'}" openshift_schedulable=true
 
 [etcd]
-master
+node0
 node1
 node2
 
@@ -89,7 +89,7 @@ node2
 # 72.14.187.157   192.168.167.129  node2.ahgoracloud.com.br node2
 # 69.164.201.80   192.168.202.6    node3.ahgoracloud.com.br node3
 
-master openshift_hostname="node0" openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'enabled', 'name':'node0'}" openshift_schedulable=true
+node0  openshift_hostname="node0" openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'enabled', 'name':'node0'}" openshift_schedulable=true
 node1  openshift_hostname="node1" openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'disabled', 'name':'node1'}"
 node2  openshift_hostname="node2" openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'disabled', 'name':'node2'}"
 node3  openshift_hostname="node3" openshift_node_labels="{'region': 'primary', 'zone': 'default', 'metrics':'disabled', 'name':'node3'}"
@@ -98,7 +98,7 @@ node3  openshift_hostname="node3" openshift_node_labels="{'region': 'primary', '
 # node2.ahgoracloud.com.br openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'disabled'}"
 
 [glusterfs]
-master  glusterfs_devices='[ "/dev/sdc", "/dev/sdd" ]'
-node1  glusterfs_devices='[ "/dev/sdc", "/dev/sdd" ]'
-node2  glusterfs_devices='[ "/dev/sdc", "/dev/sdd" ]'
+node0  glusterfs_ip='192.168.129.4'   glusterfs_devices='[ "/dev/sdc", "/dev/sdd" ]'
+node1  glusterfs_ip='192.168.166.32'  glusterfs_devices='[ "/dev/sdc", "/dev/sdd" ]'
+node2  glusterfs_ip='192.168.167.129' glusterfs_devices='[ "/dev/sdc", "/dev/sdd" ]'
 
