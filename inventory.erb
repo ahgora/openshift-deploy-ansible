@@ -3,7 +3,7 @@
 masters
 nodes
 etcd
-glusterfs
+# glusterfs
 
 [OSEv3:vars]
 ansible_ssh_user=root
@@ -18,7 +18,7 @@ openshift_master_default_subdomain=ahgoracloud.com.br
 openshift_master_named_certificates=[{"certfile": "/etc/letsencrypt/live/ahgoracloud.com.br-0001/fullchain.pem","keyfile": "/etc/letsencrypt/live/ahgoracloud.com.br-0001/privkey.pem"}]
 openshift_master_overwrite_named_certificates=true
 openshift_public_ip=23.239.31.111
-# openshift_ip=192.168.129.4
+openshift_ip=192.168.129.4
 openshift_hostname=master.ahgoracloud.com.br
 
 
@@ -89,7 +89,7 @@ node2
 # 72.14.187.157   192.168.167.129  node2.ahgoracloud.com.br node2
 # 69.164.201.80   192.168.202.6    node3.ahgoracloud.com.br node3
 
-node0  openshift_hostname="node0" openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'enabled', 'name':'node0'}" openshift_schedulable=true
+master openshift_hostname="node0" openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'enabled', 'name':'node0'}" openshift_schedulable=true
 node1  openshift_hostname="node1" openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'disabled', 'name':'node1'}"
 node2  openshift_hostname="node2" openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'disabled', 'name':'node2'}"
 node3  openshift_hostname="node3" openshift_node_labels="{'region': 'primary', 'zone': 'default', 'metrics':'disabled', 'name':'node3'}"
@@ -97,8 +97,8 @@ node3  openshift_hostname="node3" openshift_node_labels="{'region': 'primary', '
 # openshift_public_hostname="{{ inventory_hostname }}" openshift_hostname="{{ ansible_default_ipv4.address }}"
 # node2.ahgoracloud.com.br openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'disabled'}"
 
-[glusterfs]
-node0  glusterfs_ip='192.168.129.4'   glusterfs_devices='[ "/dev/sdc", "/dev/sdd" ]'
-node1  glusterfs_ip='192.168.166.32'  glusterfs_devices='[ "/dev/sdc", "/dev/sdd" ]'
-node2  glusterfs_ip='192.168.167.129' glusterfs_devices='[ "/dev/sdc", "/dev/sdd" ]'
+# [glusterfs]
+# node0  glusterfs_ip='192.168.129.4'   glusterfs_devices='[ "/dev/sdc", "/dev/sdd" ]'
+# node1  glusterfs_ip='192.168.166.32'  glusterfs_devices='[ "/dev/sdc", "/dev/sdd" ]'
+# node2  glusterfs_ip='192.168.167.129' glusterfs_devices='[ "/dev/sdc", "/dev/sdd" ]'
 
