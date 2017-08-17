@@ -74,7 +74,7 @@ openshift_node_debug_level=2
 [masters]
 # master openshift_schedulable=true
 # master openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'enabled'}" openshift_schedulable=true
-master.ahgoracloud.com.br
+master.ahgoracloud.com.br openshift_ip="192.168.129.4" openshift_hostname="master.ahgoracloud.com.br" openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'enabled', 'nodename': 'master'}" openshift_schedulable=true
 
 [etcd]
 master.ahgoracloud.com.br openshift_ip="192.168.129.4" openshift_hostname="master.ahgoracloud.com.br"
