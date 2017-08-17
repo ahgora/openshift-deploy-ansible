@@ -26,11 +26,11 @@ docker_version=1.12.6
 # docker_version=ce-17.03.1.ce-1.el7.centos
 # docker_version=ce-17.06.0.ce-1.el7.centos
 
-openshift_no_proxy='.ahgoracloud.com.br'
-openshift_generate_no_proxy_hosts=True
-
+# openshift_no_proxy='.ahgoracloud.com.br'
+# openshift_generate_no_proxy_hosts=True
+etcd_ip="192.168.129.4"
 # Configure dnsIP in the node config
-openshift_dns_ip=192.168.129.4
+openshift_dns_ip="192.168.129.4"
 
 openshift_disable_check=docker_storage,memory_availability
 # enable_docker_excluder=false
@@ -80,9 +80,7 @@ openshift_node_debug_level=2
 master.ahgoracloud.com.br openshift_hostname="master.ahgoracloud.com.br" openshift_node_labels="{'region': 'primary', 'zone': 'default', 'metrics':'enabled', 'nodename': 'master'}" openshift_schedulable=true
 
 [etcd]
-master.ahgoracloud.com.br openshift_hostname="master.ahgoracloud.com.br"
-node1.ahgoracloud.com.br openshift_hostname="node1.ahgoracloud.com.br"
-node2.ahgoracloud.com.br openshift_hostname="node2.ahgoracloud.com.br"
+node[0:2].ahgoracloud.com.br
 
 [nodes]
 # 23.239.31.111   192.168.129.4    node0.ahgoracloud.com.br master.ahgoracloud.com.br ahgoracloud.com.br node0 master
