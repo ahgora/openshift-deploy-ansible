@@ -8,6 +8,7 @@ etcd
 [OSEv3:vars]
 ansible_ssh_user=root
 deployment_type=origin
+openshift_master_cluster_method=native
 openshift_deployment_type=origin
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
 containerized=true
@@ -81,9 +82,9 @@ node1.ahgoracloud.com.br  openshift_public_ip="45.56.68.244"  openshift_ip="192.
 node2.ahgoracloud.com.br  openshift_public_ip="72.14.187.157" openshift_ip="192.168.167.129" openshift_hostname="node2.ahgoracloud.com.br" openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'disabled', 'nodename': 'node2'}"
 
 [etcd]
-node0.ahgoracloud.com.br openshift_public_ip="23.239.31.111" openshift_ip="192.168.129.4"   etcd_ip="192.168.129.4"
-node1.ahgoracloud.com.br openshift_public_ip="45.56.68.244"  openshift_ip="192.168.166.32"  etcd_ip="192.168.166.32"
-node2.ahgoracloud.com.br openshift_public_ip="72.14.187.157" openshift_ip="192.168.167.129" etcd_ip="192.168.167.129"
+node0.ahgoracloud.com.br
+node1.ahgoracloud.com.br
+node2.ahgoracloud.com.br
 
 [nodes]
 # 23.239.31.111   192.168.129.4    node0.ahgoracloud.com.br master.ahgoracloud.com.br ahgoracloud.com.br node0 master
