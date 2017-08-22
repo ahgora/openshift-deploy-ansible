@@ -9,18 +9,20 @@ etcd
 ansible_ssh_user=root
 deployment_type=origin
 openshift_master_cluster_method=native
+openshift_master_cluster_hostname=node1.ahgoracloud.com.br
+openshift_master_cluster_public_hostname=ahgoracloud.com.br
 openshift_deployment_type=origin
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
 containerized=true
 openshift_release=v3.6
 openshift_image_tag=v3.6.0
 openshift_public_hostname=ahgoracloud.com.br
-openshift_master_default_subdomain=ahgoracloud.com.br
+openshift_master_default_subdomain=apps.ahgoracloud.com.br
 openshift_master_named_certificates=[{"certfile": "/etc/letsencrypt/live/ahgoracloud.com.br-0001/fullchain.pem","keyfile": "/etc/letsencrypt/live/ahgoracloud.com.br-0001/privkey.pem"}]
 openshift_master_overwrite_named_certificates=true
-openshift_public_ip="23.239.31.111"
-openshift_ip="192.168.129.4"
-openshift_hostname=master.ahgoracloud.com.br
+# openshift_public_ip="23.239.31.111"
+# openshift_ip="192.168.129.4"
+openshift_hostname=node0.ahgoracloud.com.br
 # docker_version=ce
 docker_version=1.12.6
 # docker-ce-17.06.0.ce-1.el7.centos.x86_64
@@ -77,14 +79,14 @@ openshift_node_debug_level=2
 [masters]
 # master openshift_schedulable=true
 # master openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'enabled'}" openshift_schedulable=true
-master.ahgoracloud.com.br openshift_hostname="master.ahgoracloud.com.br" openshift_node_labels="{'region': 'primary', 'zone': 'default', 'metrics':'enabled', 'nodename': 'master'}" openshift_schedulable=true
-node1.ahgoracloud.com.br  openshift_public_ip="45.56.68.244"  openshift_ip="192.168.166.32"  openshift_hostname="node1.ahgoracloud.com.br"  openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'disabled', 'nodename': 'node1'}" openshift_schedulable=true
-node2.ahgoracloud.com.br  openshift_public_ip="72.14.187.157" openshift_ip="192.168.167.129" openshift_hostname="node2.ahgoracloud.com.br" openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'disabled', 'nodename': 'node2'}" openshift_schedulable=true
+node0.ahgoracloud.com.br  openshift_dns_ip="192.168.129.4"   openshift_public_ip="23.239.31.111"  openshift_ip="192.168.129.4"   openshift_hostname="node0.ahgoracloud.com.br"  openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'enabled',  'nodename': 'node0'}" openshift_schedulable=true
+node1.ahgoracloud.com.br  openshift_dns_ip="192.168.166.32"  openshift_public_ip="45.56.68.244"   openshift_ip="192.168.166.32"  openshift_hostname="node1.ahgoracloud.com.br"  openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'disabled', 'nodename': 'node1'}" openshift_schedulable=true
+node2.ahgoracloud.com.br  openshift_dns_ip="192.168.167.129" openshift_public_ip="72.14.187.157"  openshift_ip="192.168.167.129" openshift_hostname="node2.ahgoracloud.com.br"  openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'disabled', 'nodename': 'node2'}" openshift_schedulable=true
 
 [etcd]
-node0.ahgoracloud.com.br
-node1.ahgoracloud.com.br
-node2.ahgoracloud.com.br
+node0.ahgoracloud.com.br etcd_ip="192.168.129.4"
+node1.ahgoracloud.com.br etcd_ip="192.168.166.32"
+node2.ahgoracloud.com.br etcd_ip="192.168.167.129"
 
 [nodes]
 # 23.239.31.111   192.168.129.4    node0.ahgoracloud.com.br master.ahgoracloud.com.br ahgoracloud.com.br node0 master
@@ -93,10 +95,10 @@ node2.ahgoracloud.com.br
 # 69.164.201.80   192.168.202.6    node3.ahgoracloud.com.br node3
 
 # master openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'enabled', 'nodename': 'node0'}" openshift_schedulable=true
-master.ahgoracloud.com.br openshift_public_ip="23.239.31.111" openshift_ip="192.168.129.4"   openshift_hostname="master.ahgoracloud.com.br"  openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'enabled', 'nodename': 'master'}" openshift_schedulable=true
-node1.ahgoracloud.com.br  openshift_public_ip="45.56.68.244"  openshift_ip="192.168.166.32"  openshift_hostname="node1.ahgoracloud.com.br"  openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'disabled', 'nodename': 'node1'}" openshift_schedulable=true
-node2.ahgoracloud.com.br  openshift_public_ip="72.14.187.157" openshift_ip="192.168.167.129" openshift_hostname="node2.ahgoracloud.com.br" openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'disabled', 'nodename': 'node2'}" openshift_schedulable=true
-node3.ahgoracloud.com.br  openshift_public_ip="69.164.201.80" openshift_ip="192.168.202.6"   openshift_hostname="node3.ahgoracloud.com.br"   openshift_node_labels="{'region': 'primary', 'zone': 'default', 'metrics':'disabled', 'nodename': 'node3'}"
+node0.ahgoracloud.com.br  openshift_dns_ip="192.168.129.4"   openshift_public_ip="23.239.31.111" openshift_ip="192.168.129.4"   openshift_hostname="node0.ahgoracloud.com.br"   openshift_node_labels="{'region': 'infra',   'zone': 'default', 'metrics':'enabled',  'nodename': 'node0'}" openshift_schedulable=true
+node1.ahgoracloud.com.br  openshift_dns_ip="192.168.166.32"  openshift_public_ip="45.56.68.244"  openshift_ip="192.168.166.32"  openshift_hostname="node1.ahgoracloud.com.br"   openshift_node_labels="{'region': 'infra',   'zone': 'default', 'metrics':'disabled', 'nodename': 'node1'}" openshift_schedulable=true
+node2.ahgoracloud.com.br  openshift_dns_ip="192.168.167.129" openshift_public_ip="72.14.187.157" openshift_ip="192.168.167.129" openshift_hostname="node2.ahgoracloud.com.br"   openshift_node_labels="{'region': 'infra',   'zone': 'default', 'metrics':'disabled', 'nodename': 'node2'}" openshift_schedulable=true
+node3.ahgoracloud.com.br  openshift_dns_ip="192.168.202.6"   openshift_public_ip="69.164.201.80" openshift_ip="192.168.202.6"   openshift_hostname="node3.ahgoracloud.com.br"   openshift_node_labels="{'region': 'primary', 'zone': 'default', 'metrics':'disabled', 'nodename': 'node3'}"
 
 # openshift_public_hostname="{{ inventory_hostname }}" openshift_hostname="{{ ansible_default_ipv4.address }}"
 # node2.ahgoracloud.com.br openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'disabled'}"
