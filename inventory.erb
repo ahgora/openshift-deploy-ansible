@@ -3,13 +3,14 @@
 masters
 nodes
 etcd
+# lb
 # glusterfs
 
 [OSEv3:vars]
 ansible_ssh_user=root
 deployment_type=origin
 openshift_master_cluster_method=native
-openshift_master_cluster_hostname=node1.ahgoracloud.com.br
+openshift_master_cluster_hostname=master1.ahgoracloud.com.br
 openshift_master_cluster_public_hostname=ahgoracloud.com.br
 openshift_deployment_type=origin
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
@@ -22,7 +23,7 @@ openshift_master_named_certificates=[{"certfile": "/etc/letsencrypt/live/ahgorac
 openshift_master_overwrite_named_certificates=true
 # openshift_public_ip="23.239.31.111"
 # openshift_ip="192.168.129.4"
-openshift_hostname=node0.ahgoracloud.com.br
+openshift_hostname=master0.ahgoracloud.com.br
 # docker_version=ce
 docker_version=1.12.6
 # docker-ce-17.06.0.ce-1.el7.centos.x86_64
@@ -32,7 +33,8 @@ docker_version=1.12.6
 # openshift_no_proxy='.ahgoracloud.com.br'
 # openshift_generate_no_proxy_hosts=True
 # Configure dnsIP in the node config
-# openshift_dns_ip="23.239.31.111"
+# openshift_dns_ip="192.168.129.4"
+# openshift_master_dns_port=53
 
 openshift_disable_check=docker_storage,memory_availability
 # enable_docker_excluder=false
@@ -53,7 +55,7 @@ openshift_hosted_manage_router=true
 # openshift_generate_no_proxy_hosts=false
 
 # Deploy metrica
-openshift_hosted_metrics_public_url=https://hawkular-metrics.ahgoracloud.com.br/hawkular/metrics
+openshift_hosted_metrics_public_url=https://hawkular-metrics.apps.ahgoracloud.com.br/hawkular/metrics
 openshift_hosted_metrics_deploy=true
 openshift_hosted_metrics_selector='region=infra'
 # OK
