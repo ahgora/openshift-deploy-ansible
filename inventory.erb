@@ -7,7 +7,8 @@ lb
 # glusterfs
 
 [OSEv3:vars]
-ansible_ssh_user=root
+ansible_ssh_user=centos
+ansible_become=true
 deployment_type=origin
 openshift_master_cluster_method=native
 openshift_master_cluster_hostname=master1.oc.local
@@ -74,10 +75,9 @@ osm_use_cockpit=true
 osm_cockpit_plugins=['cockpit-kubernetes']
 
 osn_storage_plugin_deps=['ceph','glusterfs']
-openshift_master_htpasswd_file=/home/centos/ansible/users.htpasswd
+openshift_master_htpasswd_file=/home/centos/git/users.htpasswd
 
 openshift_node_debug_level=2
-ansible_become=false
 
 [masters]
 master[1:3].oc.local openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'enabled'}" openshift_schedulable=true
