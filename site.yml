@@ -22,7 +22,7 @@
         state: present
     - name: Basic Packages
       yum:
-        name: {{ item }}
+        name: "{{ item }}"
         state: present
       with_items:
         - wget
