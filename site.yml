@@ -8,6 +8,11 @@
       yum:
         name: NetworkManager
         state: present
+    - name: Start NetworkManager
+      service:
+        name: NetworkManager
+        enabled: yes
+        state: started
     - name: Install Redhat docker certificates
       yum:
         name: python-rhsm-certificates
