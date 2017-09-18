@@ -1,6 +1,6 @@
 ---
 - name: Install required packages for openshift
-  hosts: nodes
+  hosts: nodes control
   remote_user: centos
   become: yes
   tasks:
@@ -16,6 +16,14 @@
     - name: Install Redhat docker certificates
       yum:
         name: python-rhsm-certificates
+        state: present
+    - name: Install EPEL
+      yum:
+        name: epel-release
+        state: present
+    - name: Install HTOP
+      yum:
+        name: htop
         state: present
     - name: Install htpasswd (httpd-tools)
       yum:
@@ -38,3 +46,49 @@
         - pyOpenSSL.x86_64
         - python2-passlib
         - java-1.8.0-openjdk-headless
+
+- name: Create and enable swap file
+  hosts: nodes
+  remote_user: centos
+  become: yes
+  vars:
+    - swap_file_path: '/swappfile'
+    - swap_file_size_kb: 10000
+  tasks:
+    - name: Create swap file
+      command: dd if=/dev/zero of={{ swap_file_path }} bs=1024 count={{ swap_file_size_kb }}k
+               creates="{{ swap_file_path }}"
+      tags:
+        - swap.file.create
+    - name: Change swap file permissions
+      file: path="{{ swap_file_path }}"
+            owner=root
+            group=root
+            mode=0600
+      tags:
+        - swap.file.permissions
+    - name: "Check swap file type"
+      command: file {{ swap_file_path }}
+      register: swapfile
+      tags:
+        - swap.file.mkswap
+    - name: Make swap file
+      command: "mkswap {{ swap_file_path }}"
+      when: swapfile.stdout.find('swap file') == -1
+      tags:
+        - swap.file.mkswap
+    - name: Write swap entry in fstab
+      mount: name=none
+             src={{ swap_file_path }}
+             fstype=swap
+             opts=sw
+             passno=0
+             dump=0
+             state=present
+      tags:
+        - swap.fstab
+    - name: Mount swap
+      command: "swapon {{ swap_file_path }}"
+      when: ansible_swaptotal_mb < 1
+      tags:
+        - swap.file.swapon

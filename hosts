@@ -1,0 +1,10 @@
+[control]
+bastion.oc.local
+lb1.oc.local
+lb2.oc.local
+[nodes]
+master1.oc.local
+master2.oc.local
+master3.oc.local
+node1.oc.local
+node2.oc.local
