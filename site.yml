@@ -12,10 +12,6 @@
       yum:
         name: python-rhsm-certificates
         state: present
-    - name: Install pyopenssl
-      yum:
-        name: pyopenssl
-        state: present
     - name: Install htpasswd (httpd-tools)
       yum:
         name: httpd-tools
