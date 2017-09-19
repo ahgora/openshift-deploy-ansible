@@ -61,10 +61,11 @@
       tags:
         - swap.file.create
     - name: Change swap file permissions
-      file: path="{{ swap_file_path }}"
-            owner=root
-            group=root
-            mode=0600
+      file:
+        path: "{{ swap_file_path }}"
+        owner: root
+        group: root
+        mode: 0600
       tags:
         - swap.file.permissions
     - name: "Check swap file type"
@@ -78,13 +79,14 @@
       tags:
         - swap.file.mkswap
     - name: Write swap entry in fstab
-      mount: name=none
-             src={{ swap_file_path }}
-             fstype=swap
-             opts=sw
-             passno=0
-             dump=0
-             state=present
+      mount:
+        name: swap
+        src: "{{ swap_file_path }}"
+        fstype: swap
+        opts: sw
+        passno: 0
+        dump: 0
+        state: present
       tags:
         - swap.fstab
     - name: Mount swap
