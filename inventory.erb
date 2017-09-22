@@ -61,6 +61,11 @@ openshift_hosted_registry_deploy=true
 osm_use_cockpit=true
 osm_cockpit_plugins=['cockpit-kubernetes']
 
+
+# Gluster
+# openshift_storage_glusterfs_wipe=true
+# openshift_storage_glusterfs_heketi_wipe=true
+
 osn_storage_plugin_deps=['ceph','glusterfs']
 openshift_master_htpasswd_file=/home/centos/git/users.htpasswd
 
