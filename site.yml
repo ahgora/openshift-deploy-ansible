@@ -1,4 +1,44 @@
 ---
+- name: Prepare storage for mongodb on node1
+  hosts: node1.oc.local
+  become: yes
+  remote_user: centos
+  vars:
+    new_disk: "/dev/xvde"
+    vg_name: "mongo"
+    create_lv_name: "mongo"
+    create_lv_size: "49G"
+    mount_name: "/data"
+    filesystem: "xfs"
+  tasks:
+    - name: install lvm2
+      yum:
+        name: system-storage-manager
+        state: present
+    - name: Creating volume Group for mongo
+      lvg:
+        vg: "{{ vg_name }}"
+        pvs: "{{ new_disk }}"
+        state: present
+    - name: Create LVM logical volume
+      lvol:
+        vg: "{{ vg_name }}"
+        lv: "{{ create_lv_name }}"
+        size: "{{ create_lv_size }}"
+    - name: Format Volume
+      filesystem:
+        fstype: "{{ filesystem }}"
+        dev: "/dev/{{ vg_name }}/{{ create_lv_name }}"
+    - name: Mount new FS
+      mount:
+        name: "{{ mount_name }}"
+        src: "/dev/{{ vg_name }}/{{ create_lv_name }}"
+        fstype: "{{ filesystem }}"
+        opts: noatime,bg,nolock
+        state: mounted
+    - name: Set SELINUX uptions on mounted path
+      command: "/bin/chcon -R -u system_u -r object_r -t svirt_sandbox_file_t -l s0 {{ mount_name }}"
+
 - name: Install required packages for openshift
   hosts: nodes control
   remote_user: centos
