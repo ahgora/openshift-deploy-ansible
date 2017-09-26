@@ -34,7 +34,7 @@
         name: "{{ mount_name }}"
         src: "/dev/{{ vg_name }}/{{ create_lv_name }}"
         fstype: "{{ filesystem }}"
-        opts: noatime,bg,nolock
+        opts: noatime
         state: mounted
     - name: Set SELINUX uptions on mounted path
       command: "/bin/chcon -R -u system_u -r object_r -t svirt_sandbox_file_t -l s0 {{ mount_name }}"
