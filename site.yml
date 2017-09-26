@@ -101,6 +101,21 @@
         path: /etc/zabbix/zabbix_agentd.conf
         regexp: '^Server='
         line: 'Server={{ zabbix_server_host }}'
+    - name: Config Server active
+      lineinfile:
+        path: /etc/zabbix/zabbix_agentd.conf
+        regexp: '^ServerActive='
+        line: 'ServerActive={{ zabbix_server_host }}'
+    - name: Config Hostname
+      lineinfile:
+        path: /etc/zabbix/zabbix_agentd.conf
+        regexp: '^Hostname='
+        line: 'Hostiname={{ inventory_hostname }}'
+    - name: Set StartAgents to 0
+      lineinfile:
+        path: /etc/zabbix/zabbix_agentd.conf
+        regexp: '^StartAgents='
+        line: 'StartAgents=0'
     - name: Start Agent
       service:
         name: zabbix-agent.service
