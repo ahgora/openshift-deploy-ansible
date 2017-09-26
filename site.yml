@@ -108,12 +108,11 @@
         enabled: yes
 
 - name: Create and enable swap file
-  hosts: nodes
+  hosts: nodes control
   remote_user: centos
   become: yes
   vars:
-    - swap_file_path: '/swappfile'
-    - swap_file_size_kb: 10000
+    - swap_file_path: "/swappfile"
   tasks:
     - name: Create swap file
       command: dd if=/dev/zero of={{ swap_file_path }} bs=1024 count={{ swap_file_size_kb }}k
