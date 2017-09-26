@@ -110,7 +110,7 @@
       lineinfile:
         path: /etc/zabbix/zabbix_agentd.conf
         regexp: '^Hostname='
-        line: 'Hostiname={{ inventory_hostname }}'
+        line: 'Hostname={{ inventory_hostname }}'
     - name: Set StartAgents to 0
       lineinfile:
         path: /etc/zabbix/zabbix_agentd.conf
