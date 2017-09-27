@@ -36,6 +36,11 @@
         fstype: "{{ filesystem }}"
         opts: noatime
         state: mounted
+    - name: Make mongodb entrypoint
+      file:
+        path: "{{ mount_name }}/mongo"
+        state: directory
+        mode: 0777
     - name: Set SELINUX uptions on mounted path
       command: "/bin/chcon -R -u system_u -r object_r -t svirt_sandbox_file_t -l s0 {{ mount_name }}"
 
