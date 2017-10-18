@@ -1,0 +1,15 @@
+---
+- name: Update openshift htpasswd file
+  hosts: masters
+  remote_user: centos
+  become: yes
+  tasks:
+    - name: Copy password file
+      copy:
+        src: '../users.htpasswd'
+        dest: '/etc/origin/master/htpasswd'
+        mode: 0644
+
+# updatepw:
+# 	ansible masters --become -u centos -i hosts -m copy -a "src='../users.htpasswd' dest='/etc/origin/master/htpasswd' mode=0644"
+

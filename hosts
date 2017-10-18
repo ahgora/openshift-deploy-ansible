@@ -1,6 +1,9 @@
 [control]
 bastion.oc.local
-
+[masters]
+master1.oc.local
+master2.oc.local
+master3.oc.local
 [nodes]
 master1.oc.local
 master2.oc.local
