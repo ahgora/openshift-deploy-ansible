@@ -1,0 +1,175 @@
+---
+- name: Prepare storage for mongodb on node1
+  hosts: node1.oc.local
+  become: yes
+  remote_user: centos
+  vars:
+    new_disk: "/dev/xvde"
+    vg_name: "mongo"
+    create_lv_name: "mongo"
+    create_lv_size: "49G"
+    mount_name: "/data"
+    filesystem: "xfs"
+  tasks:
+    - name: install lvm2
+      yum:
+        name: system-storage-manager
+        state: present
+    - name: Creating volume Group for mongo
+      lvg:
+        vg: "{{ vg_name }}"
+        pvs: "{{ new_disk }}"
+        state: present
+    - name: Create LVM logical volume
+      lvol:
+        vg: "{{ vg_name }}"
+        lv: "{{ create_lv_name }}"
+        size: "{{ create_lv_size }}"
+    - name: Format Volume
+      filesystem:
+        fstype: "{{ filesystem }}"
+        dev: "/dev/{{ vg_name }}/{{ create_lv_name }}"
+    - name: Mount new FS
+      mount:
+        name: "{{ mount_name }}"
+        src: "/dev/{{ vg_name }}/{{ create_lv_name }}"
+        fstype: "{{ filesystem }}"
+        opts: noatime
+        state: mounted
+    - name: Make mongodb entrypoint
+      file:
+        path: "{{ mount_name }}/mongo"
+        state: directory
+        mode: 0777
+    - name: Set SELINUX uptions on mounted path
+      command: "/bin/chcon -R -u system_u -r object_r -t svirt_sandbox_file_t -l s0 {{ mount_name }}"
+
+- name: Install required packages for openshift
+  hosts: nodes control
+  remote_user: centos
+  become: yes
+  tasks:
+    - name: Install NetworkManager
+      yum:
+        name: NetworkManager
+        state: present
+    - name: Start NetworkManager
+      service:
+        name: NetworkManager
+        enabled: yes
+        state: started
+    - name: Install Redhat docker certificates
+      yum:
+        name: python-rhsm-certificates
+        state: present
+    - name: Install EPEL
+      yum:
+        name: epel-release
+        state: present
+    - name: Install HTOP
+      yum:
+        name: htop
+        state: present
+    - name: Install htpasswd (httpd-tools)
+      yum:
+        name: httpd-tools
+        state: present
+    - name: Basic Packages
+      yum:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - wget
+        - git
+        - net-tools
+        - bind-utils
+        - iptables-services
+        - bridge-utils
+        - bash-completion
+        - vim
+        - python-cryptography
+        - pyOpenSSL.x86_64
+        - python2-passlib
+        - java-1.8.0-openjdk-headless
+
+- name: Monitoring (Zabbix)
+  hosts: nodes control
+  remote_user: centos
+  become: yes
+  tasks:
+    - name: Install Zabbix agent
+      yum:
+        name: http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-agent-3.4.1-1.el7.x86_64.rpm
+        state: present
+    - name: Config Server
+      lineinfile:
+        path: /etc/zabbix/zabbix_agentd.conf
+        regexp: '^Server='
+        line: 'Server={{ zabbix_server_host }}'
+    - name: Config Server active
+      lineinfile:
+        path: /etc/zabbix/zabbix_agentd.conf
+        regexp: '^ServerActive='
+        line: 'ServerActive={{ zabbix_server_host }}'
+    - name: Config Hostname
+      lineinfile:
+        path: /etc/zabbix/zabbix_agentd.conf
+        regexp: '^Hostname='
+        line: 'Hostname={{ inventory_hostname }}'
+    - name: Set StartAgents to 0
+      lineinfile:
+        path: /etc/zabbix/zabbix_agentd.conf
+        regexp: '^StartAgents='
+        line: 'StartAgents=0'
+    - name: Start Agent
+      service:
+        name: zabbix-agent.service
+        state: started
+        enabled: yes
+
+- name: Create and enable swap file
+  hosts: nodes control
+  remote_user: centos
+  become: yes
+  vars:
+    - swap_file_path: "/swappfile"
+  tasks:
+    - name: Create swap file
+      command: dd if=/dev/zero of={{ swap_file_path }} bs=1024 count={{ swap_file_size_kb }}k
+               creates="{{ swap_file_path }}"
+      tags:
+        - swap.file.create
+    - name: Change swap file permissions
+      file:
+        path: "{{ swap_file_path }}"
+        owner: root
+        group: root
+        mode: 0600
+      tags:
+        - swap.file.permissions
+    - name: "Check swap file type"
+      command: file {{ swap_file_path }}
+      register: swapfile
+      tags:
+        - swap.file.mkswap
+    - name: Make swap file
+      command: "mkswap {{ swap_file_path }}"
+      when: swapfile.stdout.find('swap file') == -1
+      tags:
+        - swap.file.mkswap
+    - name: Write swap entry in fstab
+      mount:
+        name: swap
+        src: "{{ swap_file_path }}"
+        fstype: swap
+        opts: sw
+        passno: 0
+        dump: 0
+        state: present
+      tags:
+        - swap.fstab
+    - name: Mount swap
+      command: "swapon {{ swap_file_path }}"
+      when: ansible_swaptotal_mb < 1
+      tags:
+        - swap.file.swapon

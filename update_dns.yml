@@ -1,0 +1,48 @@
+---
+- name: Update openshift dnsmasq hosts
+  hosts: all
+  remote_user: centos
+  become: yes
+  tasks:
+    - name: Copy config
+      copy:
+        src: "files/{{ item }}"
+        dest: "/etc/dnsmasq.d/{{ item }}"
+        mode: 0644
+      with_items:
+        - "ahgora-arb.conf"
+        - "ahgora-bro.conf"
+        - "ahgora-bro2.conf"
+        - "ahgora-bro3.conf"
+        - "ahgora-bro4.conf"
+        - "ahgora-bro5.conf"
+        - "ahgora-bro6.conf"
+        - "ahgora-cache.conf"
+        - "ahgora-cache1.conf"
+        - "ahgora-pw2.conf"
+        - "ahgora-pw6.conf"
+        - "ahgora-pw8.conf"
+        - "ahgora-reps.conf"
+        - "ahgora-reps2.conf"
+    - name: Set Selinux
+      command: "/bin/chcon -R -u system_u -r object_r -t dnsmasq_etc_t -l s0 /etc/dnsmasq.d/{{ item }}"
+      with_items:
+        - "ahgora-arb.conf"
+        - "ahgora-bro.conf"
+        - "ahgora-bro2.conf"
+        - "ahgora-bro3.conf"
+        - "ahgora-bro4.conf"
+        - "ahgora-bro5.conf"
+        - "ahgora-bro6.conf"
+        - "ahgora-cache.conf"
+        - "ahgora-cache1.conf"
+        - "ahgora-pw2.conf"
+        - "ahgora-pw6.conf"
+        - "ahgora-pw8.conf"
+        - "ahgora-reps.conf"
+        - "ahgora-reps2.conf"
+    - name: Restart dnsmasq
+      service:
+        name: dnsmasq
+        state: restarted
+

@@ -6,55 +6,46 @@ etcd
 # glusterfs
 
 [OSEv3:vars]
-ansible_ssh_user=root
+ansible_ssh_user=centos
+ansible_become=true
 deployment_type=origin
-openshift_deployment_type=origin
-openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
+
+openshift_master_cluster_method=native
+openshift_master_cluster_hostname=cluster.oc.local
+openshift_master_cluster_public_hostname=ahgoracloud.com.br
+
 containerized=true
+openshift_deployment_type=origin
+
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
 openshift_release=v3.6
 openshift_image_tag=v3.6.0
+
 openshift_public_hostname=ahgoracloud.com.br
-openshift_master_default_subdomain=ahgoracloud.com.br
-openshift_master_named_certificates=[{"certfile": "/etc/letsencrypt/live/ahgoracloud.com.br-0001/fullchain.pem","keyfile": "/etc/letsencrypt/live/ahgoracloud.com.br-0001/privkey.pem"}]
+openshift_master_default_subdomain=apps.ahgoracloud.com.br
+openshift_master_named_certificates=[{"certfile": "/home/centos/git/ahgoracloud.com.br/fullchain.pem","keyfile": "/home/centos/git/ahgoracloud.com.br/privkey.pem"}]
 openshift_master_overwrite_named_certificates=true
-openshift_public_ip=23.239.31.111
-openshift_ip=192.168.129.4
-openshift_hostname=master.ahgoracloud.com.br
-
-
-# docker_version=ce
 docker_version=1.12.6
-# docker-ce-17.06.0.ce-1.el7.centos.x86_64
-# docker_version=ce-17.03.1.ce-1.el7.centos
-# docker_version=ce-17.06.0.ce-1.el7.centos
 
+# openshift_no_proxy='.oc.local'
+# openshift_generate_no_proxy_hosts=True
 # Configure dnsIP in the node config
-# openshift_dns_ip=192.168.129.4
+# openshift_dns_ip="192.168.129.4"
+# openshift_master_dns_port=53
 
 openshift_disable_check=docker_storage,memory_availability
-# enable_docker_excluder=false
-# enable_excluders=false
 
-# https://cbs.centos.org/koji/packageinfo?packageID=3175
-# https://github.com/openshift/openshift-ansible/issues/4639
-# openshift_additional_repos=[{"id": "centos-future", "baseurl": "https://buildlogs.centos.org/centos/7/paas/x86_64/openshift-future/", "enabled": 1, "gpgcheck": 0}]
-# openshift_additional_repos=[{"id": "centos-paas-36", "baseurl": "https://buildlogs.centos.org/centos/7/paas/x86_64/openshift-origin36/", "enabled": 1, "gpgcheck": 0}]
-
-# openshift_use_system_containers=False
-
+# Install Examples
 openshift_install_examples=true
-openshift_hosted_router_selector='region=infra'
-openshift_hosted_router_replicas=2
+openshift_hosted_router_selector='region=masters'
+openshift_hosted_router_replicas=3
 openshift_hosted_manage_router=true
 
-# openshift_generate_no_proxy_hosts=false
 
 # Deploy metrica
-# openshift_hosted_metrics_public_url=https://hawkular-metrics.ahgoracloud.com.br/hawkular/metrics
-openshift_metrics_install_metrics=true
+openshift_hosted_metrics_public_url=https://hawkular-metrics.apps.ahgoracloud.com.br/hawkular/metrics
 openshift_hosted_metrics_deploy=true
-openshift_hosted_metrics_selector='metrics=enabled'
-# OK
+openshift_hosted_metrics_selector='zone=infra'
 openshift_hosted_metrics_deployer_version=v3.6.0
 
 # Deploy Logging
@@ -69,36 +60,34 @@ openshift_hosted_registry_deploy=true
 osm_use_cockpit=true
 osm_cockpit_plugins=['cockpit-kubernetes']
 
-osn_storage_plugin_deps=['ceph','glusterfs']
-openshift_master_htpasswd_file=/root/users.htpasswd
 
-openshift_node_debug_level=2
+# Gluster
+# openshift_storage_glusterfs_wipe=true
+# openshift_storage_glusterfs_heketi_wipe=true
+
+osn_storage_plugin_deps=['ceph','glusterfs']
+openshift_master_htpasswd_file=/home/centos/git/users.htpasswd
+
+openshift_node_debug_level=1
+openshift_disable_swap=false
 
 [masters]
-# master openshift_schedulable=true
-master openshift_hostname="node0" openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'enabled'}" openshift_schedulable=true
+# master[1:3].oc.local openshift_node_labels="{'region': 'masters', 'zone': 'infra', 'metrics':'enabled'}" openshift_schedulable=true
+master[1:3].oc.local openshift_schedulable=true
 
 [etcd]
-node0
-node1
-node2
+# master[1:3].oc.local
+master1.oc.local openshift_hostname="master1.oc.local"
+master2.oc.local openshift_hostname="master2.oc.local"
+master3.oc.local openshift_hostname="master3.oc.local"
 
 [nodes]
-# 23.239.31.111   192.168.129.4    node0.ahgoracloud.com.br master.ahgoracloud.com.br ahgoracloud.com.br node0 master
-# 45.56.68.244    192.168.166.32   node1.ahgoracloud.com.br node1
-# 72.14.187.157   192.168.167.129  node2.ahgoracloud.com.br node2
-# 69.164.201.80   192.168.202.6    node3.ahgoracloud.com.br node3
+master[1:3].oc.local openshift_node_labels="{'region': 'masters', 'zone': 'infra', 'metrics':'enabled'}" openshift_schedulable=true
+node1.oc.local openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'disable', 'nodename':'mongo'}" openshift_schedulable=true openshift_hostname="node1.oc.local"
+node2.oc.local openshift_node_labels="{'region': 'primary', 'zone': 'default', 'metrics':'enabled'}" openshift_schedulable=true openshift_hostname="node2.oc.local"
 
-master openshift_hostname="node0" openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'enabled', 'name':'node0'}" openshift_schedulable=true
-node1  openshift_hostname="node1" openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'disabled', 'name':'node1'}"
-node2  openshift_hostname="node2" openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'disabled', 'name':'node2'}"
-node3  openshift_hostname="node3" openshift_node_labels="{'region': 'primary', 'zone': 'default', 'metrics':'disabled', 'name':'node3'}"
-
-# openshift_public_hostname="{{ inventory_hostname }}" openshift_hostname="{{ ansible_default_ipv4.address }}"
-# node2.ahgoracloud.com.br openshift_node_labels="{'region': 'infra', 'zone': 'default', 'metrics':'disabled'}"
-
-# [glusterfs]
-# node0  glusterfs_ip='192.168.129.4'   glusterfs_devices='[ "/dev/sdc", "/dev/sdd" ]'
-# node1  glusterfs_ip='192.168.166.32'  glusterfs_devices='[ "/dev/sdc", "/dev/sdd" ]'
-# node2  glusterfs_ip='192.168.167.129' glusterfs_devices='[ "/dev/sdc", "/dev/sdd" ]'
+[glusterfs]
+master1.oc.local glusterfs_devices='[ "/dev/xvde", "/dev/xvdf" ]'
+master2.oc.local glusterfs_devices='[ "/dev/xvde", "/dev/xvdf" ]'
+master3.oc.local glusterfs_devices='[ "/dev/xvde", "/dev/xvdf" ]'
 

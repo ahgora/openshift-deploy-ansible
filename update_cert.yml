@@ -1,0 +1,23 @@
+---
+- name: Update openshift htpasswd file
+  hosts: masters
+  remote_user: centos
+  become: yes
+  tasks:
+    - name: Copy SSL cert
+      copy:
+        src: "../ahgoracloud.com.br/{{ item }}"
+        dest: "/etc/origin/master/named_certificates/{{ item }}"
+        mode: 0644
+      items:
+        - "fullchain.pem"
+        - "privkey.pem"
+    - name: Restart API service
+      service:
+        name: origin-master-api
+        state: restarted
+
+
+# updatepw:
+# 	ansible masters --become -u centos -i hosts -m copy -a "src='../users.htpasswd' dest='/etc/origin/master/htpasswd' mode=0644"
+
